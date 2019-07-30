@@ -24,7 +24,15 @@ export default ({
     topics.push(new Topic(name));
     parent.linkedTopics.push(topics.length-1)
   },
-  save: () => console.log(JSON.stringify(topics.map(t => Object.values(t))))
+  save: () => {
+    const state = JSON.stringify(topics.map(t => Object.values(t)));
+    const anchor = document.createElement('a');
+    anchor.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(state);
+    anchor.download = 'topics.json';
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  }
 });
 
 export const ROOT_ID = 0;
