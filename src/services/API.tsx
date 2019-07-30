@@ -8,8 +8,8 @@ export class Topic {
 
 // Database stub
 const topics = new Map<string, Topic>([
-  ['root', new Topic('Topic list', ['1', '2', 'uuid'], ["this is the content of the root element", "this is a second content item"])],
-  ['1', new Topic('Topic 1', ['uuid', '2'])],
+  ['root', new Topic('Topic list', ['1', '2', 'uuid'])],
+  ['1', new Topic('Topic 1', ['uuid', '2'], ["this is the content of topic 1", "this is a second content item"])],
   ['2', new Topic('Topic 2')],
   ['uuid', new Topic('A random topic')],
 ]);
