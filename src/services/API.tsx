@@ -1,7 +1,7 @@
 export class Topic {
   constructor(
     public name: string,
-    public subTopics?: Array<string>
+    public subTopics?: string[]
   ){ };
 };
 
