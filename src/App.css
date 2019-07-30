@@ -5,3 +5,9 @@
 .App {
   text-align: center;
 }
+
+.flex-column {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

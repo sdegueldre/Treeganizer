@@ -10,7 +10,12 @@ export default ((props) => {
     <>
       <div className="Topic">
         <h2>{topic.name}:</h2>
-        {topic.subTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
+        <div>
+          {topic.contents.map(c => <p key={c}>{c}</p>)}
+        </div>
+        <div className="flex-column">
+          {topic.subTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
+        </div>
       </div>
       <button onClick={() => setId(ROOT_ID)}>Back to root</button>
     </>
