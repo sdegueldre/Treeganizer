@@ -24,6 +24,16 @@ export default ({
     topics.push(new Topic(name));
     parent.linkedTopics.push(topics.length-1)
   },
+  removeTopic: (id: number) => {
+    topics = topics.map(t => ({...t, linkedTopics: t.linkedTopics.map(linkedId => {
+      if(linkedId < id)
+        return linkedId;
+      if(linkedId === id)
+        return null;
+      return linkedId-1;
+    }).filter(v => v !== null)}) as Topic);
+    topics.splice(id, 1);
+  },
   save: () => {
     const state = JSON.stringify(topics.map(t => Object.values(t)));
     const anchor = document.createElement('a');

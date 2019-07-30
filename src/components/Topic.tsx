@@ -33,7 +33,12 @@ export default ((props) => {
           <button onClick={addContent}>Add content</button>
         </div>
         <div className="flex-column">
-          {topic.linkedTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
+          {topic.linkedTopics.map(id => (
+            <div key={id}>
+              <button onClick={() => setId(id)}>{API.getTopic(id).name}</button>
+              <button onClick={() => {API.removeTopic(id); refreshComponent(!refresher)}}>Delete</button>
+            </div>
+          ))}
           <button onClick={addTopic}>Add topic</button>
         </div>
       </div>
