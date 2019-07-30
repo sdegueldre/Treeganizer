@@ -19,3 +19,5 @@ export default ({
     return topic;
   }
 });
+
+export const ROOT_ID = 'topic list';

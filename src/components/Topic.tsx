@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import './Topic.scss';
-import API from '../services/API';
+import API, { ROOT_ID } from '../services/API';
 
 export default ((props) => {
-  let [topicId, setId] = useState(props.id || 'topic list');
+  let [topicId, setId] = useState(props.id || ROOT_ID);
   const topic = API.getTopic(topicId);
 
   return (
@@ -12,7 +12,7 @@ export default ((props) => {
         <h2>{topic.name}:</h2>
         {topic.subTopics && topic.subTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
       </div>
-      <button onClick={() => setId('topic list')}>Back to root</button>
+      <button onClick={() => setId(ROOT_ID)}>Back to root</button>
     </>
   )
 }) as React.FC<{id?: string}>;
