@@ -16,6 +16,14 @@ export default ((props) => {
     }
   }
 
+  const addTopic = () => {
+    const newTopic = window.prompt();
+    if(newTopic && !newTopic.match(/^\s+$/)){
+      API.addTopic(newTopic, topic);
+      refreshComponent(!refresher);
+    }
+  }
+
   return (
     <>
       <div className="Topic">
@@ -26,9 +34,11 @@ export default ((props) => {
         </div>
         <div className="flex-column">
           {topic.linkedTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
+          <button onClick={addTopic}>Add topic</button>
         </div>
       </div>
       <button onClick={() => setId(ROOT_ID)}>Back to root</button>
+      <button onClick={API.save}>Save state</button>
     </>
   )
 }) as React.FC<{id?: number}>;

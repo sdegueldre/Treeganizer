@@ -20,6 +20,11 @@ export default ({
       throw new Error(`Could not render non-existant topic with id "${id}"`);
     return topics[id];
   },
+  addTopic: (name: string, parent: Topic) => {
+    topics.push(new Topic(name));
+    parent.linkedTopics.push(topics.length-1)
+  },
+  save: () => console.log(JSON.stringify(topics.map(t => Object.values(t))))
 });
 
 export const ROOT_ID = 0;
