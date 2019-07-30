@@ -10,7 +10,7 @@ export default ((props) => {
     <>
       <div className="Topic">
         <h2>{topic.name}:</h2>
-        {topic.subTopics && topic.subTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
+        {topic.subTopics.map(id => <button key={id} onClick={() => setId(id)}>{API.getTopic(id).name}</button>)}
       </div>
       <button onClick={() => setId(ROOT_ID)}>Back to root</button>
     </>
