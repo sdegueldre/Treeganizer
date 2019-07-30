@@ -53,6 +53,8 @@ export default ({
             }
             resolve();
           }
+        } else {
+          resolve();
         }
         document.body.removeChild(input);
       });
