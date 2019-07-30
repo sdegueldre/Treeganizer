@@ -39,6 +39,7 @@ export default ((props) => {
       </div>
       <button onClick={() => setId(ROOT_ID)}>Back to root</button>
       <button onClick={API.save}>Save state</button>
+      <button onClick={async () => {await API.load(); refreshComponent(!refresher)}}>Load state</button>
     </>
   )
 }) as React.FC<{id?: number}>;

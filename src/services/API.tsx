@@ -7,7 +7,7 @@ export class Topic {
 };
 
 // Database stub
-const topics = [
+let topics = [
   new Topic('Topic list', [1, 2, 3]),
   new Topic('Topic 1', [3, 2], ["this is the content of topic 1", "this is a second content item"]),
   new Topic('Topic 2'),
@@ -32,6 +32,31 @@ export default ({
     document.body.appendChild(anchor);
     anchor.click();
     document.body.removeChild(anchor);
+  },
+  load: () => {
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    input.type = 'file';
+    input.style.display = 'none';
+    input.click();
+    return new Promise((resolve, reject) => {
+      input.addEventListener('change', () => {
+        const files = input.files;
+        if(files){
+          const fr = new FileReader();
+          fr.readAsText(files[0]);
+          fr.onload = () => {
+            try {
+              topics = JSON.parse(fr.result as string).map((v: [string, number[], string[]]) => new Topic(...v));
+            } catch(e) {
+              console.error('Invalid JSON data, aborting.');
+            }
+            resolve();
+          }
+        }
+        document.body.removeChild(input);
+      });
+    });
   }
 });
 
