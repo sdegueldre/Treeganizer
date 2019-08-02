@@ -9,17 +9,24 @@ export class Topic {
 export type topicId = number;
 
 // Database stub
-let topics = [
-  new Topic('Topic list', [1, 2, 3]),
-  new Topic('Topic 1', [3, 2], ["this is the content of topic 1", "this is a second content item"]),
-  new Topic('Topic 2'),
-  new Topic('A random topic'),
-];
+let topicData = window.localStorage.getItem("topics");
+let topics: Topic[];
+if(topicData === null){
+  topics = [
+    new Topic('Topic list', [1, 2, 3]),
+    new Topic('Topic 1', [3, 2], ["this is the content of topic 1", "this is a second content item"]),
+    new Topic('Topic 2'),
+    new Topic('A random topic'),
+  ]
+} else {
+  topics = JSON.parse(topicData) as Topic[];
+}
 
 export default ({
   getTopic: (id: topicId): Topic & {id: topicId} => {
-    if(!topics[id])
+    if(!topics[id]) {
       throw new Error(`Could not render non-existant topic with id "${id}"`);
+    }
     const copy = {...topics[id]};
     return {
       name: copy.name,
@@ -43,6 +50,9 @@ export default ({
     topics.splice(id, 1);
   },
   save: () => {
+    window.localStorage.setItem("topics", JSON.stringify(topics));
+  },
+  export: () => {
     const state = JSON.stringify(topics.map(t => Object.values(t)));
     const anchor = document.createElement('a');
     anchor.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(state);
@@ -59,7 +69,7 @@ export default ({
     const topic = topics[topicId];
     topic.contents.splice(contentId, 1);
   },
-  load: () => {
+  import: () => {
     const input = document.createElement('input');
     document.body.appendChild(input);
     input.type = 'file';

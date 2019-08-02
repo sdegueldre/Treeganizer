@@ -44,7 +44,7 @@ export default ((props) => {
     <>
       <div className="Topic">
         <h2>{topic.name}:</h2>
-        <div>
+        <div style={{width: "840px"}}>
           {topic.contents.map((content, contentId) => {
             return (
               <div className="flex-row" key={content}>
@@ -67,7 +67,8 @@ export default ((props) => {
       </div>
       <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
       <button onClick={API.save}>Save state</button>
-      <button onClick={async () => {await API.load(); setHistory([ROOT_ID]); setTopic(API.getTopic(ROOT_ID));}}>Load state</button>
+      <button onClick={API.export}>Export state</button>
+      <button onClick={async () => {await API.import(); setTopic(API.getTopic(ROOT_ID)); setHistory([ROOT_ID]); }}>Import state</button>
       <button onClick={goBack}>Go back</button>
     </>
   )
