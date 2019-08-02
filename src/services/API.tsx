@@ -6,6 +6,8 @@ export class Topic {
   ){ };
 };
 
+export type topicId = number;
+
 // Database stub
 let topics = [
   new Topic('Topic list', [1, 2, 3]),
@@ -15,14 +17,20 @@ let topics = [
 ];
 
 export default ({
-  getTopic: (id: number): Topic & {id: number} => {
+  getTopic: (id: topicId): Topic & {id: topicId} => {
     if(!topics[id])
       throw new Error(`Could not render non-existant topic with id "${id}"`);
-    return {...topics[id], id: id};
+    const copy = {...topics[id]};
+    return {
+      name: copy.name,
+      linkedTopics: [...copy.linkedTopics],
+      contents: [...copy.contents],
+      id: id
+    };
   },
-  addTopic: (name: string, parent: Topic) => {
+  addTopic: (name: string, parentId: number) => {
     topics.push(new Topic(name));
-    parent.linkedTopics.push(topics.length-1)
+    topics[parentId].linkedTopics.push(topics.length-1);
   },
   removeTopic: (id: number) => {
     topics = topics.map(t => ({...t, linkedTopics: t.linkedTopics.map(linkedId => {
@@ -72,4 +80,4 @@ export default ({
   }
 });
 
-export const ROOT_ID = 0;
+export const ROOT_ID = 0 as topicId;

@@ -18,7 +18,7 @@ export default ((props) => {
   function addTopic(){
     const newTopic = window.prompt();
     if(newTopic && !newTopic.match(/^\s+$/)){
-      API.addTopic(newTopic, topic);
+      API.addTopic(newTopic, topic.id);
       setTopic(API.getTopic(topic.id));
     }
   }
@@ -53,9 +53,9 @@ export default ((props) => {
           <button onClick={addTopic}>Add topic</button>
         </div>
       </div>
-      <button onClick={() => {setTopic(API.getTopic(ROOT_ID));}}>Back to root</button>
+      <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
       <button onClick={API.save}>Save state</button>
-      <button onClick={async () => {await API.load(); setTopic(API.getTopic(ROOT_ID));}}>Load state</button>
+      <button onClick={async () => {await API.load(); setHistory([]); setTopic(API.getTopic(ROOT_ID));}}>Load state</button>
       <button onClick={goBack}>Go back</button>
     </>
   )
