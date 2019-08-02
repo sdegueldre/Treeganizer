@@ -71,7 +71,7 @@ export default ((props) => {
         <hr/>
         <div className="controls">
           <div className="flex-row">
-            <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
+            <button onClick={() => props.history.push('/')}>Back to root</button>
             <button onClick={goBack}>Go back</button>
           </div>
           <button onClick={API.save}>Save state</button>
