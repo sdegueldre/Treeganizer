@@ -67,7 +67,7 @@ export default ((props) => {
       </div>
       <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
       <button onClick={API.save}>Save state</button>
-      <button onClick={async () => {await API.load(); setHistory([]); setTopic(API.getTopic(ROOT_ID));}}>Load state</button>
+      <button onClick={async () => {await API.load(); setHistory([ROOT_ID]); setTopic(API.getTopic(ROOT_ID));}}>Load state</button>
       <button onClick={goBack}>Go back</button>
     </>
   )
