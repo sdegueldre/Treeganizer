@@ -47,7 +47,7 @@ export default ((props) => {
         <div>
           {topic.contents.map((content, contentId) => {
             return (
-              <div className="flex-row" key={content}>
+              <div className="flex-row justify-end" key={content}>
                 <ContentBlock content={content} />
                 <button onClick={() => removeContent(contentId)}>Delete</button>
               </div>
