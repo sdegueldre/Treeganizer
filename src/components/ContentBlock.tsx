@@ -1,4 +1,5 @@
 import React from 'react';
+import './ContentBlock.scss';
 
 export default ((props) => {
   return (

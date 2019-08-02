@@ -53,7 +53,11 @@ export default ({
   },
   addContent: (content: string, id: topicId) => {
     const topic = topics[id];
-    topic.contents.push(content); 
+    topic.contents.push(content);
+  },
+  removeContent: (contentId: number, topicId: topicId) => {
+    const topic = topics[topicId];
+    topic.contents.splice(contentId, 1);
   },
   load: () => {
     const input = document.createElement('input');

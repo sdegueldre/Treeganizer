@@ -15,6 +15,11 @@ export default ((props) => {
     }
   }
 
+  function removeContent(contentId: number){
+    API.removeContent(contentId, topic.id);
+    setTopic(API.getTopic(topic.id));
+  }
+
   function addTopic(){
     const newTopic = window.prompt();
     if(newTopic && !newTopic.match(/^\s+$/)){
@@ -40,7 +45,14 @@ export default ((props) => {
       <div className="Topic">
         <h2>{topic.name}:</h2>
         <div>
-          {topic.contents.map(v => <ContentBlock content={v} key={v}/>)}
+          {topic.contents.map((content, contentId) => {
+            return (
+              <div className="flex-row" key={content}>
+                <ContentBlock content={content} />
+                <button onClick={() => removeContent(contentId)}>Delete</button>
+              </div>
+            )
+          })}
           <button onClick={addContent}>Add content</button>
         </div>
         <div className="flex-column">
