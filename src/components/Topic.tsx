@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import './Topic.scss';
 import API, { ROOT_ID } from '../services/API';
+import { RouteComponentProps } from 'react-router-dom';
 import ContentBlock from './ContentBlock';
 
 export default ((props) => {
-  const [history, setHistory] = useState([ROOT_ID]);
-  const [topic, setTopic] = useState(API.getTopic(ROOT_ID));
+  const topicId = parseInt(props.match.params.topicId) || ROOT_ID;
+  const [topic, setTopic] = useState(API.getTopic(topicId));
+  if(topic.id !== topicId)
+    setTopic(API.getTopic(topicId));
 
   function addContent(){
     const content = window.prompt();
@@ -28,16 +31,15 @@ export default ((props) => {
     }
   }
 
-  function goBack(){
-    if(history.length > 1) {
-      setHistory(history.slice(0,-1));
-      setTopic(API.getTopic(history[history.length-2]));
-    }
+  function removeTopic(id: number){
+    API.removeTopic(id);
+    setTopic(API.getTopic(topic.id));
   }
 
+  const goBack = props.history.goBack;
+
   function goTo(id: number){
-    setHistory([...history, id]);
-    setTopic(API.getTopic(id));
+    props.history.push(`/${id}`);
   }
 
   return (
@@ -60,7 +62,7 @@ export default ((props) => {
           {topic.linkedTopics.map(id => (
             <div className="flex-row" style={{width: "100%"}} key={id}>
               <button className="grow" onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
-              <button onClick={() => {API.removeTopic(id); setTopic(API.getTopic(topic.id));}}>Delete</button>
+              <button onClick={() => removeTopic(id)}>Delete</button>
             </div>
           ))}
           <button onClick={addTopic}>Add topic</button>
@@ -73,9 +75,9 @@ export default ((props) => {
             <button onClick={goBack}>Go back</button>
           </div>
           <button onClick={API.save}>Save state</button>
-          <button onClick={async () => {await API.import(); setTopic(API.getTopic(ROOT_ID)); setHistory([ROOT_ID]); }}>Import</button>
+          <button onClick={async () => {await API.import(); goTo(ROOT_ID); }}>Import</button>
           <button onClick={API.export}>Export</button>
         </div>
       </div>
   )
-}) as React.FC<{id?: number}>;
+}) as React.FC<RouteComponentProps<{topicId: string}>>;
