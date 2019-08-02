@@ -43,17 +43,19 @@ export default ((props) => {
   return (
       <div className="Topic" style={{width: "840px", margin: "auto"}}>
         <h2>{topic.name}:</h2>
-        <div style={{width: "100%"}}>
-          {topic.contents.map((content, contentId) => (
-            <div className="flex-row" key={content}>
-              <ContentBlock className="grow" content={content} />
-              <button onClick={() => removeContent(contentId)}>Delete</button>
-            </div>
-          ))}
-          <button onClick={addContent}>Add content</button>
-        </div>
-        <hr/>
-        <h2>Related topics:</h2>
+        {topic.id !== ROOT_ID && <>
+          <div style={{width: "100%"}}>
+            {topic.contents.map((content, contentId) => (
+              <div className="flex-row" key={content}>
+                <ContentBlock className="grow" content={content} />
+                <button onClick={() => removeContent(contentId)}>Delete</button>
+              </div>
+            ))}
+            <button onClick={addContent}>Add content</button>
+          </div>
+          <hr/>
+          <h2>Related topics:</h2>
+        </>}
         <div className="flex-column" style={{width: "100%"}}>
           {topic.linkedTopics.map(id => (
             <div className="flex-row" style={{width: "100%"}} key={id}>
