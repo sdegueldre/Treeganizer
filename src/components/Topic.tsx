@@ -70,7 +70,7 @@ export default ((props) => {
 
         <hr/>
         <div className="controls">
-          <div>
+          <div className="flex-row">
             <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
             <button onClick={goBack}>Go back</button>
           </div>
