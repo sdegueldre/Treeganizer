@@ -51,6 +51,10 @@ export default ({
     anchor.click();
     document.body.removeChild(anchor);
   },
+  addContent: (content: string, id: topicId) => {
+    const topic = topics[id];
+    topic.contents.push(content); 
+  },
   load: () => {
     const input = document.createElement('input');
     document.body.appendChild(input);

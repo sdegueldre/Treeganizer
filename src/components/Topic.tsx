@@ -10,7 +10,7 @@ export default ((props) => {
   function addContent(){
     const content = window.prompt();
     if(content && !content.match(/^\s+$/)){
-      topic.contents.push(content);
+      API.addContent(content, topic.id);
       setTopic(API.getTopic(topic.id));
     }
   }
