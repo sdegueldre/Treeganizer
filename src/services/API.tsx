@@ -15,10 +15,10 @@ let topics = [
 ];
 
 export default ({
-  getTopic: (id: number): Topic => {
+  getTopic: (id: number): Topic & {id: number} => {
     if(!topics[id])
       throw new Error(`Could not render non-existant topic with id "${id}"`);
-    return topics[id];
+    return {...topics[id], id: id};
   },
   addTopic: (name: string, parent: Topic) => {
     topics.push(new Topic(name));

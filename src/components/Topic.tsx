@@ -4,17 +4,14 @@ import API, { ROOT_ID } from '../services/API';
 import ContentBlock from './ContentBlock';
 
 export default ((props) => {
-  const [topicId, setId] = useState(props.id || ROOT_ID);
-  const [history, setHistory] = useState([topicId]);
-  console.log('component reloaded; history:', history);
-  const [refresher, refreshComponent] = useState();
-  const topic = API.getTopic(topicId);
+  const [history, setHistory] = useState([ROOT_ID]);
+  const [topic, setTopic] = useState(API.getTopic(ROOT_ID));
 
   function addContent(){
     const content = window.prompt();
     if(content && !content.match(/^\s+$/)){
       topic.contents.push(content);
-      refreshComponent(!refresher);
+      setTopic(API.getTopic(topic.id));
     }
   }
 
@@ -22,18 +19,18 @@ export default ((props) => {
     const newTopic = window.prompt();
     if(newTopic && !newTopic.match(/^\s+$/)){
       API.addTopic(newTopic, topic);
-      refreshComponent(!refresher);
+      setTopic(API.getTopic(topic.id));
     }
   }
 
   function goBack(){
     setHistory(history.slice(0,-1));
-    setId(history[history.length-2]);
+    setTopic(API.getTopic(history[history.length-2]));
   }
 
   function goTo(id: number){
     setHistory([...history, id]);
-    setId(id);
+    setTopic(API.getTopic(id));
   }
 
   return (
@@ -48,15 +45,15 @@ export default ((props) => {
           {topic.linkedTopics.map(id => (
             <div key={id}>
               <button onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
-              <button onClick={() => {API.removeTopic(id); refreshComponent(!refresher)}}>Delete</button>
+              <button onClick={() => {API.removeTopic(id); setTopic(API.getTopic(topic.id));}}>Delete</button>
             </div>
           ))}
           <button onClick={addTopic}>Add topic</button>
         </div>
       </div>
-      <button onClick={() => setId(ROOT_ID)}>Back to root</button>
+      <button onClick={() => {setTopic(API.getTopic(ROOT_ID));}}>Back to root</button>
       <button onClick={API.save}>Save state</button>
-      <button onClick={async () => {await API.load(); refreshComponent(!refresher)}}>Load state</button>
+      <button onClick={async () => {await API.load(); setTopic(API.getTopic(ROOT_ID));}}>Load state</button>
       <button onClick={goBack}>Go back</button>
     </>
   )
