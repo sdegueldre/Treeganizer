@@ -41,35 +41,39 @@ export default ((props) => {
   }
 
   return (
-    <>
-      <div className="Topic">
+      <div className="Topic" style={{width: "840px", margin: "auto"}}>
         <h2>{topic.name}:</h2>
-        <div style={{width: "840px"}}>
-          {topic.contents.map((content, contentId) => {
-            return (
-              <div className="flex-row" key={content}>
-                <ContentBlock content={content} />
-                <button onClick={() => removeContent(contentId)}>Delete</button>
-              </div>
-            )
-          })}
+        <div style={{width: "100%"}}>
+          {topic.contents.map((content, contentId) => (
+            <div className="flex-row" key={content}>
+              <ContentBlock className="grow" content={content} />
+              <button onClick={() => removeContent(contentId)}>Delete</button>
+            </div>
+          ))}
           <button onClick={addContent}>Add content</button>
         </div>
-        <div className="flex-column">
+        <hr/>
+        <h2>Related topics:</h2>
+        <div className="flex-column" style={{width: "100%"}}>
           {topic.linkedTopics.map(id => (
-            <div key={id}>
-              <button onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
+            <div className="flex-row" style={{width: "100%"}} key={id}>
+              <button className="grow" onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
               <button onClick={() => {API.removeTopic(id); setTopic(API.getTopic(topic.id));}}>Delete</button>
             </div>
           ))}
           <button onClick={addTopic}>Add topic</button>
         </div>
+
+        <hr/>
+        <div className="controls">
+          <div>
+            <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
+            <button onClick={goBack}>Go back</button>
+          </div>
+          <button onClick={API.save}>Save state</button>
+          <button onClick={async () => {await API.import(); setTopic(API.getTopic(ROOT_ID)); setHistory([ROOT_ID]); }}>Import</button>
+          <button onClick={API.export}>Export</button>
+        </div>
       </div>
-      <button onClick={() => {goTo(ROOT_ID);}}>Back to root</button>
-      <button onClick={API.save}>Save state</button>
-      <button onClick={API.export}>Export state</button>
-      <button onClick={async () => {await API.import(); setTopic(API.getTopic(ROOT_ID)); setHistory([ROOT_ID]); }}>Import state</button>
-      <button onClick={goBack}>Go back</button>
-    </>
   )
 }) as React.FC<{id?: number}>;

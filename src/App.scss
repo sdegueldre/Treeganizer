@@ -1,0 +1,53 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+}
+
+.flex-column {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.grow {
+  flex-grow: 1;
+  padding: 0.5rem;
+  @at-root p#{&} {
+    margin: 0rem;
+    margin-right: 1rem;
+    text-align: left;
+  }
+
+  @at-root button#{&} {
+    margin: 0;
+    padding-right: 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0,0,0,0.1);
+    }
+  }
+}
+
+button {
+  margin: 0.1rem;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
