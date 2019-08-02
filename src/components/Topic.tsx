@@ -24,8 +24,10 @@ export default ((props) => {
   }
 
   function goBack(){
-    setHistory(history.slice(0,-1));
-    setTopic(API.getTopic(history[history.length-2]));
+    if(history.length > 1) {
+      setHistory(history.slice(0,-1));
+      setTopic(API.getTopic(history[history.length-2]));
+    }
   }
 
   function goTo(id: number){
