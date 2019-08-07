@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './Topic.scss';
 import API, { ROOT_ID } from '../services/API';
 import { RouteComponentProps } from 'react-router-dom';
@@ -7,6 +7,13 @@ import ContentBlock from './ContentBlock';
 export default ((props) => {
   const topicId = parseInt(props.match.params.topicId) || ROOT_ID;
   const [topic, setTopic] = useState(API.getTopic(topicId));
+  const [signedIn, setSigninStatus] = useState<null|boolean>(null);
+
+  useEffect(() => {
+    API.signedIn.listen(setSigninStatus)
+      .then(() => setSigninStatus(API.signedIn.get()));
+  }, [])
+
   if(topic.id !== topicId)
     setTopic(API.getTopic(topicId));
 
@@ -74,9 +81,20 @@ export default ((props) => {
             <button onClick={() => props.history.push('/')}>Back to root</button>
             <button onClick={goBack}>Go back</button>
           </div>
-          <button onClick={API.save}>Save state</button>
-          <button onClick={async () => {await API.import(); goTo(ROOT_ID); }}>Import</button>
-          <button onClick={API.export}>Export</button>
+          <div className="flex-row">
+            <button onClick={API.save}>Save state</button>
+            <button onClick={async () => {await API.import(); goTo(ROOT_ID); }}>Import</button>
+            <button onClick={API.export}>Export</button>
+          </div>
+          <div className="flex-row">
+            {signedIn === null ? (
+              <button>Waiting for Google drive API to load...</button>
+            ): signedIn ? (
+              <button onClick={API.signOut}>Sign out of Google</button>
+            ):(
+              <button onClick={API.signIn}>Sign into Google</button>
+            )}
+          </div>
         </div>
       </div>
   )

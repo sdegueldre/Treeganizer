@@ -18,7 +18,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "types": [
+      "gapi",
+      "gapi.client",
+      "gapi.client.drive"
+    ]
   },
   "include": [
     "src"
