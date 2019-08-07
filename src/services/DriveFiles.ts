@@ -12,12 +12,12 @@ const clientLoaded = new Promise((resolve, reject) => {
   gapiScript.addEventListener('error', reject);
   document.body.appendChild(gapiScript);
 }).then(() => {
-  console.log('script appended and loaded');
   // Load client and auth2 components of gapi
   return new Promise(resolve => gapi.load('client:auth2', resolve));
 });
 
 export default class DriveFiles {
+  // Passthrough functions of the drive.files interface that wait for the client to be ready before executing
   public create = (...query: ArgumentTypes<typeof gapi.client.drive.files.create>) => this.clientReady.then(() => gapi.client.drive.files.create(...query));
   public list = (...query: ArgumentTypes<typeof gapi.client.drive.files.list>) => this.clientReady.then(() => gapi.client.drive.files.list(...query));
   public get = (...query: ArgumentTypes<typeof gapi.client.drive.files.get>) => this.clientReady.then(() => gapi.client.drive.files.get(...query));
@@ -38,7 +38,6 @@ export default class DriveFiles {
     private apiKey: string
   ) {
     this.clientReady = clientLoaded.then(() => {
-      console.log('client loaded');
       return gapi.client.init({
         apiKey: this.apiKey,
         clientId: this.clientId,
