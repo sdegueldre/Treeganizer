@@ -28,8 +28,8 @@ if(topicData === null){
   topics = JSON.parse(topicData) as Topic[];
 }
 
-export default ({
-  getTopic: (id: topicId): Topic & {id: topicId} => {
+class API {
+  static getTopic(id: topicId): Topic & {id: topicId} {
     if(!topics[id]) {
       throw new Error(`Could not render non-existant topic with id "${id}"`);
     }
@@ -40,12 +40,14 @@ export default ({
       contents: [...copy.contents],
       id: id
     };
-  },
-  addTopic: (name: string, parentId: number) => {
+  }
+
+  static addTopic(name: string, parentId: number) {
     topics.push(new Topic(name));
     topics[parentId].linkedTopics.push(topics.length-1);
-  },
-  removeTopic: (id: number) => {
+  }
+
+  static removeTopic(id: number) {
     topics = topics.map(t => ({...t, linkedTopics: t.linkedTopics.map(linkedId => {
       if(linkedId < id)
         return linkedId;
@@ -54,8 +56,9 @@ export default ({
       return linkedId-1;
     }).filter(v => v !== null)}) as Topic);
     topics.splice(id, 1);
-  },
-  save: async () => {
+  }
+
+  static async save() {
     console.log('saving');
     window.localStorage.setItem("topics", JSON.stringify(topics));
 
@@ -71,8 +74,9 @@ export default ({
       return await files.save(file.id, JSON.stringify(topics));
     }
     return true;
-  },
-  export: () => {
+  }
+
+  static export() {
     const state = JSON.stringify(topics.map(t => Object.values(t)));
     const anchor = document.createElement('a');
     anchor.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(state);
@@ -80,16 +84,19 @@ export default ({
     document.body.appendChild(anchor);
     anchor.click();
     document.body.removeChild(anchor);
-  },
-  addContent: (content: string, id: topicId) => {
+  }
+
+  static addContent(content: string, id: topicId) {
     const topic = topics[id];
     topic.contents.push(content);
-  },
-  removeContent: (contentId: number, topicId: topicId) => {
+  }
+
+  static removeContent(contentId: number, topicId: topicId) {
     const topic = topics[topicId];
     topic.contents.splice(contentId, 1);
-  },
-  import: () => {
+  }
+
+  static import() {
     const input = document.createElement('input');
     document.body.appendChild(input);
     input.type = 'file';
@@ -115,10 +122,28 @@ export default ({
         document.body.removeChild(input);
       });
     });
-  },
-  signedIn: files.signedIn,
-  signIn: files.signIn.bind(files),
-  signOut: files.signOut.bind(files),
-});
+  }
 
+  static async loadFromDrive() {
+    const resp = await files.list({spaces: 'appDataFolder'});
+    const topicFiles = resp.result.files.filter((f: File) => f.name === 'topics.json');
+    let file;
+    if(topics.length === 0) {
+      // create topics file and assign it to file
+    } else {
+      file = topicFiles[0];
+      const response = await files.get({fileId: file.id, alt: 'media'});
+      console.log(response.result);
+      topics = response.result;
+    }
+    console.log(this.getTopic(ROOT_ID));
+    return this.getTopic(ROOT_ID);
+  }
+
+  public static signedIn = files.signedIn;
+  public static signIn = files.signIn.bind(files);
+  public static signOut = files.signOut.bind(files);
+}
+
+export default API;
 export const ROOT_ID = 0 as topicId;

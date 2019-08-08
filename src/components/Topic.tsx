@@ -83,14 +83,17 @@ export default ((props) => {
           </div>
           <div className="flex-row">
             <button onClick={API.save}>Save state</button>
-            <button onClick={async () => {await API.import(); goTo(ROOT_ID); }}>Import</button>
+            <button onClick={async () => {await API.import(); goTo(ROOT_ID);}}>Import</button>
             <button onClick={API.export}>Export</button>
           </div>
           <div className="flex-row">
             {signedIn === null ? (
               <button>Waiting for Google drive API to load...</button>
             ): signedIn ? (
-              <button onClick={API.signOut}>Sign out of Google</button>
+              <>
+                <button onClick={API.signOut}>Sign out of Google</button>
+                <button onClick={async () => {await API.loadFromDrive(); goTo(ROOT_ID);}}>Load data from drive</button>
+              </>
             ):(
               <button onClick={API.signIn}>Sign into Google</button>
             )}
