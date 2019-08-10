@@ -74,7 +74,7 @@ export default ((props) => {
 
   return (
       <div className="topic container p-5 my-4 border">
-        <h2 className="text-center">{topic.name}: (latest version)</h2>
+        <h2 className="text-center">{topic.name}:</h2>
         {topic.id !== ROOT_ID && <>
           <div className="d-flex flex-column">
             {topic.contents.map((content, contentId) => (
