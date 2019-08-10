@@ -72,7 +72,7 @@ export default ((props) => {
   }
 
   function shortcutHandler(e: KeyboardEvent ) {
-    if(e.key === 's' && e.ctrlKey) {
+    if(e.key === 's' && e.ctrlKey && !saveInProgress) {
       e.preventDefault();
       save();
     }
