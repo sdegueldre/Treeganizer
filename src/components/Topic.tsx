@@ -4,17 +4,11 @@ import './Topic.scss';
 import { RouteComponentProps } from 'react-router-dom';
 import ContentBlock from './ContentBlock';
 
-function shortcutHandler(e: KeyboardEvent ) {
-  if(e.key === 's' && e.ctrlKey) {
-    e.preventDefault();
-    API.save();
-  }
-}
-
 export default ((props) => {
   const topicId = parseInt(props.match.params.topicId) || ROOT_ID;
   const [topic, setTopic] = useState(API.getTopic(topicId));
   const [signedIn, setSigninStatus] = useState<null|boolean>(null);
+  const [saveInProgress, setSaveInProgress] = useState<boolean>(false);
 
   useEffect(() => {
     API.signedIn.listen(setSigninStatus)
@@ -72,6 +66,18 @@ export default ((props) => {
     e.dataTransfer.setData('ha', 'ah');
   }
 
+  function save() {
+    setSaveInProgress(true);
+    API.save().then(() => setSaveInProgress(false));
+  }
+
+  function shortcutHandler(e: KeyboardEvent ) {
+    if(e.key === 's' && e.ctrlKey) {
+      e.preventDefault();
+      save();
+    }
+  }
+
   return (
       <div className="topic container p-5 my-4 border">
         <h2 className="text-center">{topic.name}:</h2>
@@ -110,7 +116,11 @@ export default ((props) => {
             <button onClick={goBack} className="btn btn-primary">Go back</button>
           </div>
           <div className="d-flex flex-row">
-            <button onClick={API.save} className="btn btn-primary">Save state</button>
+            <button
+              onClick={save}
+              className="btn btn-primary"
+              disabled={saveInProgress}
+            >Save</button>
             <button onClick={async () => {await API.import(); goTo(ROOT_ID);}} className="btn btn-primary">Import</button>
             <button onClick={API.export} className="btn btn-primary">Export</button>
           </div>
