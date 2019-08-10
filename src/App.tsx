@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 export default (() => (
   <Router>
-    <Route exact path="/:topicId" component={Topic}/>
-    <Route exact path="/" component={Topic}/>
+    <Route exact path="/:topicId?" component={Topic}/>
   </Router>
 )) as React.FC;

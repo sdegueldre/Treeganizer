@@ -1,8 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import './Topic.scss';
 import API, { ROOT_ID } from '../services/API';
+import './Topic.scss';
 import { RouteComponentProps } from 'react-router-dom';
 import ContentBlock from './ContentBlock';
+
+function shortcutHandler(e: KeyboardEvent ) {
+  if(e.key === 's' && e.ctrlKey) {
+    e.preventDefault();
+    API.save();
+  }
+}
 
 export default ((props) => {
   const topicId = parseInt(props.match.params.topicId) || ROOT_ID;
@@ -12,6 +19,18 @@ export default ((props) => {
   useEffect(() => {
     API.signedIn.listen(setSigninStatus)
       .then(() => setSigninStatus(API.signedIn.get()));
+  }, [])
+
+  useEffect(() => {
+    console.log("signed in effect triggered, value:", signedIn);
+    if(signedIn){
+      API.loadFromDrive().then(() => setTopic(API.getTopic(topicId)));
+    }
+  }, [signedIn])
+
+  useEffect(() => {
+    window.addEventListener('keydown', shortcutHandler);
+    return () => window.removeEventListener('keydown', shortcutHandler);
   }, [])
 
   if(topic.id !== topicId)
@@ -49,50 +68,59 @@ export default ((props) => {
     props.history.push(`/${id}`);
   }
 
+  function dragContent(e: React.DragEvent<HTMLElement>): void {
+    e.dataTransfer.setData('ha', 'ah');
+  }
+
   return (
-      <div className="Topic" style={{width: "840px", margin: "auto"}}>
-        <h2>{topic.name}:</h2>
+      <div className="topic container p-5 my-4 border">
+        <h2 className="text-center">{topic.name}: (latest version)</h2>
         {topic.id !== ROOT_ID && <>
-          <div style={{width: "100%"}}>
+          <div className="d-flex flex-column">
             {topic.contents.map((content, contentId) => (
-              <div className="flex-row" key={content}>
-                <ContentBlock className="grow" content={content} />
-                <button onClick={() => removeContent(contentId)}>Delete</button>
+              <div
+                className="d-flex flex-row justify-content-between align-items-center"
+                key={content}
+                draggable={true}
+                onDragStart={dragContent}
+              >
+                <ContentBlock content={content} />
+                <button onClick={() => removeContent(contentId)} className="btn btn-danger">Delete</button>
               </div>
             ))}
-            <button onClick={addContent}>Add content</button>
+            <button onClick={addContent} className="btn btn-primary mx-auto">Add content</button>
           </div>
           <hr/>
-          <h2>Related topics:</h2>
+          <h2 className="text-center">Related topics:</h2>
         </>}
-        <div className="flex-column" style={{width: "100%"}}>
+        <div className="d-flex flex-column">
           {topic.linkedTopics.map(id => (
-            <div className="flex-row" style={{width: "100%"}} key={id}>
-              <button className="grow" onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
-              <button onClick={() => removeTopic(id)}>Delete</button>
+            <div className="d-flex flex-row justify-content-between  align-items-center" key={id}>
+              <button onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
+              <button onClick={() => removeTopic(id)} className="btn btn-danger">Delete</button>
             </div>
           ))}
-          <button onClick={addTopic}>Add topic</button>
+          <button onClick={addTopic} className="btn btn-primary mx-auto">Add topic</button>
         </div>
 
         <hr/>
-        <div className="controls">
-          <div className="flex-row">
-            <button onClick={() => props.history.push('/')}>Back to root</button>
-            <button onClick={goBack}>Go back</button>
+        <div className="controls d-flex flex-column align-items-center">
+          <div className="d-flex flex-row">
+            <button onClick={() => props.history.push('/')} className="btn btn-primary">Back to root</button>
+            <button onClick={goBack} className="btn btn-primary">Go back</button>
           </div>
-          <div className="flex-row">
-            <button onClick={API.save}>Save state</button>
-            <button onClick={async () => {await API.import(); goTo(ROOT_ID);}}>Import</button>
-            <button onClick={API.export}>Export</button>
+          <div className="d-flex flex-row">
+            <button onClick={API.save} className="btn btn-primary">Save state</button>
+            <button onClick={async () => {await API.import(); goTo(ROOT_ID);}} className="btn btn-primary">Import</button>
+            <button onClick={API.export} className="btn btn-primary">Export</button>
           </div>
-          <div className="flex-row">
+          <div className="d-flex flex-row">
             {signedIn === null ? (
-              <button>Waiting for Google drive API to load...</button>
+              <button className="btn btn-primary btn-disabled">Waiting for Google drive API to load...</button>
             ): signedIn ? (
               <>
-                <button onClick={API.signOut}>Sign out of Google</button>
-                <button onClick={async () => {await API.loadFromDrive(); goTo(ROOT_ID);}}>Load data from drive</button>
+                <button onClick={API.signOut} className="btn btn-primary">Sign out of Google</button>
+                <button onClick={async () => {goTo(ROOT_ID); await API.loadFromDrive();}} className="btn btn-primary">Load data from drive</button>
               </>
             ):(
               <button onClick={API.signIn}>Sign into Google</button>
