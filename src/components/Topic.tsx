@@ -16,19 +16,28 @@ export default ((props) => {
   }, [])
 
   useEffect(() => {
-    console.log("signed in effect triggered, value:", signedIn);
+    // If signedIn status changes, reload current topc from API
     if(signedIn){
-      API.loadFromDrive().then(() => setTopic(API.getTopic(topicId)));
+      API.loadFromDrive().then(() => setTopic(topic => API.getTopic(topic.id)));
     }
   }, [signedIn])
 
   useEffect(() => {
+    function shortcutHandler(e: KeyboardEvent ) {
+      if(e.key === 's' && e.ctrlKey) {
+        e.preventDefault();
+        if(!saveInProgress) {
+          save();
+        }
+      }
+    }
+
     window.addEventListener('keydown', shortcutHandler);
     return () => window.removeEventListener('keydown', shortcutHandler);
-  }, [])
+  }, [saveInProgress])
 
-  if(topic.id !== topicId)
-    setTopic(API.getTopic(topicId));
+  // Load topic if topicId changes
+  useEffect(() => setTopic(API.getTopic(topicId)), [topicId]);
 
   function addContent(){
     const content = window.prompt();
@@ -69,13 +78,6 @@ export default ((props) => {
   function save() {
     setSaveInProgress(true);
     API.save().then(() => setSaveInProgress(false));
-  }
-
-  function shortcutHandler(e: KeyboardEvent ) {
-    if(e.key === 's' && e.ctrlKey && !saveInProgress) {
-      e.preventDefault();
-      save();
-    }
   }
 
   return (

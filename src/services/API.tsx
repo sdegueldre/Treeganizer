@@ -31,6 +31,7 @@ if(topicData === null){
 class API {
   static getTopic(id: topicId): Topic & {id: topicId} {
     if(!topics[id]) {
+      console.log(id);
       throw new Error(`Could not render non-existant topic with id "${id}"`);
     }
     const copy = {...topics[id]};
