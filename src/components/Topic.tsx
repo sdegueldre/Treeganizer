@@ -79,13 +79,13 @@ export default ((props) => {
           <div className="d-flex flex-column">
             {topic.contents.map((content, contentId) => (
               <div
-                className="d-flex flex-row justify-content-between align-items-center"
+                className="d-flex flex-row align-items-center flex-wrap"
                 key={content}
                 draggable={true}
                 onDragStart={dragContent}
               >
-                <ContentBlock content={content} />
-                <button onClick={() => removeContent(contentId)} className="btn btn-danger">Delete</button>
+                <ContentBlock content={content} className="col-12 col-md-9"/>
+                <button onClick={() => removeContent(contentId)} className="btn btn-danger ml-auto">Delete</button>
               </div>
             ))}
             <button onClick={addContent} className="btn btn-primary mx-auto">Add content</button>
@@ -95,9 +95,9 @@ export default ((props) => {
         </>}
         <div className="d-flex flex-column">
           {topic.linkedTopics.map(id => (
-            <div className="d-flex flex-row justify-content-between  align-items-center" key={id}>
+            <div className="d-flex flex-row align-items-center" key={id}>
               <button onClick={() => goTo(id)}>{API.getTopic(id).name}</button>
-              <button onClick={() => removeTopic(id)} className="btn btn-danger">Delete</button>
+              <button onClick={() => removeTopic(id)} className="btn btn-danger ml-auto">Delete</button>
             </div>
           ))}
           <button onClick={addTopic} className="btn btn-primary mx-auto">Add topic</button>
