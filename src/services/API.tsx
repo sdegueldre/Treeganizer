@@ -141,9 +141,9 @@ class API {
     return this.getTopic(ROOT_ID);
   }
 
-  public static signedIn = files.signedIn;
-  public static signIn = files.signIn.bind(files);
-  public static signOut = files.signOut.bind(files);
+  static signedIn = files.signedIn;
+  static signIn = files.signIn.bind(files);
+  static signOut = files.signOut.bind(files);
 }
 
 export default API;
