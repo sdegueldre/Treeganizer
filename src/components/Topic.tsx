@@ -71,10 +71,6 @@ export default ((props) => {
     props.history.push(`/${id}`);
   }
 
-  function dragContent(e: React.DragEvent<HTMLElement>): void {
-    e.dataTransfer.setData('ha', 'ah');
-  }
-
   function save() {
     setSaveInProgress(true);
     API.save().then(() => setSaveInProgress(false));
@@ -86,12 +82,7 @@ export default ((props) => {
         {topic.id !== ROOT_ID && <>
           <div className="d-flex flex-column">
             {topic.contents.map((content, contentId) => (
-              <div
-                className="d-flex flex-row align-items-center flex-wrap"
-                key={content}
-                draggable={true}
-                onDragStart={dragContent}
-              >
+              <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
                 <ContentBlock content={content} className="col-12 col-md-9"/>
                 <button onClick={() => removeContent(contentId)} className="btn btn-danger ml-auto">Delete</button>
               </div>
