@@ -83,10 +83,18 @@ export default ((props) => {
 
   function save() {
     setSaveInProgress(true);
-    API.save().then(() => setSaveInProgress(false));
+    API.save().then(() => {
+      const saveIndicator = document.querySelector('.save-successful') as HTMLElement;
+      if(saveIndicator){
+        saveIndicator.classList.remove('flip-in-out');
+        window.setTimeout(() => saveIndicator.classList.add('flip-in-out'), 1);
+      }
+      setSaveInProgress(false);
+    });
   }
 
   return (
+    <>
       <div className="topic container p-5 my-4 border">
         <h2 className="text-center">{topic.name}:</h2>
         {topic.id !== ROOT_ID && <>
@@ -142,5 +150,10 @@ export default ((props) => {
           </div>
         </div>
       </div>
+      {saveInProgress &&
+        <div className="saving-indicator"><div></div><div></div><div></div><div></div></div>
+      }
+      <div className="save-successful"></div>
+    </>
   )
 }) as React.FC<RouteComponentProps<{topicId: string}>>;
