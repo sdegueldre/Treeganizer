@@ -14,7 +14,7 @@ const clientLoaded = new Promise((resolve, reject) => {
 }).then(() => {
   // Load client and auth2 components of gapi
   return new Promise(resolve => gapi.load('client:auth2', resolve));
-});
+}).catch(console.log);
 
 export default class DriveFiles {
   // Passthrough functions of the drive.files interface that wait for the client to be ready before executing
@@ -44,7 +44,7 @@ export default class DriveFiles {
         discoveryDocs: DISCOVERY_DOCS,
         scope: SCOPES
       });
-    });
+    }).catch(console.log);
     this.signedIn = {
       get: () => null,
       listen: (callback: (status: boolean) => void) => this.clientReady.then(() => gapi.auth2.getAuthInstance().isSignedIn.listen(callback)),
