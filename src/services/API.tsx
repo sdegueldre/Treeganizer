@@ -29,7 +29,7 @@ if(topicData === null){
 }
 
 class API {
-  static getTopic(id: topicId): Topic & {id: topicId} {
+  static getTopic(id: topicId) {
     if(!topics[id]) {
       console.log(id);
       throw new Error(`Could not render non-existant topic with id "${id}"`);
@@ -57,6 +57,13 @@ class API {
       return linkedId-1;
     }).filter(v => v !== null)}) as Topic);
     topics.splice(id, 1);
+  }
+
+  static editTopic(topic: Topic & {id: number}) {
+    const t = {...topic}
+    const id = t.id;
+    delete(t.id);
+    topics[id] = t;
   }
 
   static async save() {

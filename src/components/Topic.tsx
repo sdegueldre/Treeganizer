@@ -65,6 +65,16 @@ export default ((props) => {
     setTopic(API.getTopic(topic.id));
   }
 
+  function editContent(id: number){
+    const content = topic.contents[id]
+    const newContent = window.prompt("edit content:", content)
+    if(newContent && !newContent.match(/^\s+$/) && newContent !== content){
+      topic.contents[id] = newContent;
+      API.editTopic(topic);
+      setTopic(API.getTopic(topic.id));
+    }
+  }
+
   const goBack = props.history.goBack;
 
   function goTo(id: number){
@@ -84,7 +94,8 @@ export default ((props) => {
             {topic.contents.map((content, contentId) => (
               <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
                 <ContentBlock content={content} className="col-12 col-md-9"/>
-                <button onClick={() => removeContent(contentId)} className="btn btn-danger ml-auto">Delete</button>
+                <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
+                <button onClick={() => removeContent(contentId)} className="btn btn-danger">Delete</button>
               </div>
             ))}
             <button onClick={addContent} className="btn btn-primary mx-auto">Add content</button>
