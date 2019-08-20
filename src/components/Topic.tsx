@@ -126,7 +126,7 @@ export default ((props) => {
                 <button onClick={async () => {goTo(ROOT_ID); await API.loadFromDrive();}} className="btn btn-primary">Load data from drive</button>
               </>
             ):(
-              <button onClick={API.signIn}>Sign into Google</button>
+              <button onClick={API.signIn} className="btn btn-primary">Sign into Google</button>
             )}
           </div>
         </div>
