@@ -10,6 +10,8 @@ export default ((props) => {
   const [signedIn, setSigninStatus] = useState<null|boolean>(null);
   const [saveInProgress, setSaveInProgress] = useState<boolean>(false);
 
+  const [searchContent, setSearchContent] = useState('');
+
   useEffect(() => {
     API.signedIn.listen(setSigninStatus)
       .then(() => setSigninStatus(API.signedIn.get()));
@@ -95,17 +97,25 @@ export default ((props) => {
 
   return (
     <>
-      <div className="topic container p-5 my-4 border">
-        <h2 className="text-center">{topic.name}:</h2>
+      <div className="topic container p-5 my-4 border d-flex flex-column">
+        <div className="header d-flex justify-content-between">
+          <h2 className="text-center d-block">{topic.name}:</h2>
+          <input className="col-6" type="text" value={searchContent} onChange={(e) => setSearchContent(e.target.value)}></input>
+        </div>
         {topic.id !== ROOT_ID && <>
           <div className="d-flex flex-column">
-            {topic.contents.map((content, contentId) => (
-              <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
-                <ContentBlock content={content} className="col-12 col-md-9"/>
-                <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
-                <button onClick={() => removeContent(contentId)} className="btn btn-danger">Delete</button>
-              </div>
-            ))}
+            {topic.contents
+              .filter(c => c.toLowerCase()
+              .includes(searchContent.toLowerCase()))
+              .map((content, contentId) => (
+                  <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
+                    <ContentBlock content={content} className="col-12 col-md-9"/>
+                    <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
+                    <button onClick={() => removeContent(contentId)} className="btn btn-danger">Delete</button>
+                  </div>
+                )
+              )
+            }
             <button onClick={addContent} className="btn btn-primary mx-auto">Add content</button>
           </div>
           <hr/>
