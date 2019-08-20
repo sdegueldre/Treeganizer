@@ -97,8 +97,8 @@ export default ((props) => {
 
   return (
     <>
-      <div className="topic container p-5 my-4 border d-flex flex-column">
-        <div className="header d-flex justify-content-between">
+      <div className="topic container p-5 my-4 d-flex flex-column">
+        <div className="header d-flex justify-content-between mb-4">
           <h2 className="text-center d-block">{topic.name}:</h2>
           <input className="col-6" type="text" value={searchContent} onChange={(e) => setSearchContent(e.target.value)}></input>
         </div>

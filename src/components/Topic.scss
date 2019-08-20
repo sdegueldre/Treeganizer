@@ -1,8 +1,14 @@
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 
-.topic {
+body {
   background-color: $light;
+}
+
+.topic {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px transparentize(black, 0.9);
 }
 
 *[draggable=true] {
