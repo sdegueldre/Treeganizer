@@ -86,7 +86,7 @@ export default ((props) => {
       <div className="d-flex flex-column">
         {linkedTopics.map(t => (
           <div className="d-flex flex-row align-items-center" key={t.id}>
-            <button onClick={() => props.history.push(`/${t.id}`)}>{t.name}</button>
+            <button className="btn btn-light border" onClick={() => props.history.push(`/${t.id}`)}>{t.name}</button>
             <button onClick={() => removeTopic(t.id)} className="btn btn-danger ml-auto">Delete</button>
           </div>)
         )}
