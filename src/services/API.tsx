@@ -28,7 +28,16 @@ if(topicData === null){
   topics = JSON.parse(topicData) as Topic[];
 }
 
+type Callback = () => void;
+
 class API {
+
+  static callbacks = {change: [] as Callback[]};
+
+  static onChange(callback: Callback) {
+    this.callbacks.change.push(callback);
+  }
+
   static getTopic(id: topicId) {
     if(!topics[id]) {
       console.log(id);
@@ -46,6 +55,7 @@ class API {
   static addTopic(name: string, parentId: number) {
     topics.push(new Topic(name));
     topics[parentId].linkedTopics.push(topics.length-1);
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static removeTopic(id: number) {
@@ -57,6 +67,7 @@ class API {
       return linkedId-1;
     }).filter(v => v !== null)}) as Topic);
     topics.splice(id, 1);
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static editTopic(topic: Topic & {id: number}) {
@@ -64,6 +75,7 @@ class API {
     const id = t.id;
     delete(t.id);
     topics[id] = t;
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static async save() {
@@ -97,11 +109,13 @@ class API {
   static addContent(content: string, id: topicId) {
     const topic = topics[id];
     topic.contents.push(content);
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static removeContent(contentId: number, topicId: topicId) {
     const topic = topics[topicId];
     topic.contents.splice(contentId, 1);
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static import() {
@@ -130,6 +144,7 @@ class API {
         document.body.removeChild(input);
       });
     });
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static async loadFromDrive() {
@@ -146,6 +161,7 @@ class API {
     }
     console.log(this.getTopic(ROOT_ID));
     return this.getTopic(ROOT_ID);
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static signedIn = files.signedIn;
