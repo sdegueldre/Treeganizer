@@ -77,8 +77,6 @@ export default ((props) => {
     }
   }
 
-  const goBack = props.history.goBack;
-
   function goTo(id: number){
     props.history.push(`/${id}`);
   }
@@ -133,10 +131,6 @@ export default ((props) => {
 
         <hr/>
         <div className="controls d-flex flex-column align-items-center">
-          <div className="d-flex flex-row">
-            <button onClick={() => props.history.push('/')} className="btn btn-primary">Back to root</button>
-            <button onClick={goBack} className="btn btn-primary">Go back</button>
-          </div>
           <div className="d-flex flex-row">
             <button
               onClick={save}
