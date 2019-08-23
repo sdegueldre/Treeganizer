@@ -143,8 +143,7 @@ class API {
         }
         document.body.removeChild(input);
       });
-    });
-    this.callbacks.change.forEach(cb => cb());
+    }).then(() => this.callbacks.change.forEach(cb => cb()));
   }
 
   static async loadFromDrive() {
@@ -159,8 +158,6 @@ class API {
       console.log(response.result);
       topics = response.result;
     }
-    console.log(this.getTopic(ROOT_ID));
-    return this.getTopic(ROOT_ID);
     this.callbacks.change.forEach(cb => cb());
   }
 
