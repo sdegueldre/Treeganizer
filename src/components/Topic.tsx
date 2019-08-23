@@ -23,8 +23,8 @@ export default ((props) => {
     }
   }
 
-  function removeContent(contentId: number){
-    API.removeContent(contentId, topic.id);
+  function removeContent(content: string){
+    API.removeContent(topic.contents.indexOf(content), topic.id);
   }
 
   function addTopic(){
@@ -74,7 +74,7 @@ export default ((props) => {
               <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
                 <ContentBlock content={content} className="col-12 col-md-9"/>
                 <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
-                <button onClick={() => removeContent(contentId)} className="btn btn-danger">Delete</button>
+                <button onClick={() => removeContent(content)} className="btn btn-danger">Delete</button>
               </div>
             )
           )}
