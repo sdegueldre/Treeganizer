@@ -7,11 +7,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 export default (() => (
   <Router>
-    <Route path="/" component={Navbar}/>
-    <div className="topic container p-5 my-4 d-flex flex-column">
+    <Route path="/" component={Navbar}/>    
       <Route exact path="/:topicId?" component={Topic}/>
-      <hr/>
       <Route path="/" component={Persistence}/>
-    </div>
   </Router>
 )) as React.FC;

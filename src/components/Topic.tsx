@@ -49,11 +49,12 @@ export default ((props) => {
 
   return (
     <>
-      <div className="header d-flex justify-content-between mb-4">
-        <h2 className="text-center d-block">{topic.name}:</h2>
-        <input className="col-6" type="text" value={searchContent} onChange={(e) => setSearchContent(e.target.value)}></input>
-      </div>
+    <h2 className="text-center d-block">{topic.name}</h2>
+    <div className="topic container px-5 py-4 my-4 d-flex flex-column">
       {topic.id !== ROOT_ID && <>
+        <label className="px-0 col-12 col-md-6 ml-auto mb-3 d-flex flex-row align-items-center">
+          Search: <input className="ml-3 flex-grow-1" type="text" value={searchContent} onChange={(e) => setSearchContent(e.target.value)}></input>
+        </label>
         <div className="d-flex flex-column">
           {topic.contents
             .filter(c => c.toLowerCase()
@@ -81,6 +82,7 @@ export default ((props) => {
         ))}
         <button onClick={addTopic} className="btn btn-primary mx-auto">Add topic</button>
       </div>
+    </div>
     </>
   )
 }) as React.FC<RouteComponentProps<{topicId: string}>>;

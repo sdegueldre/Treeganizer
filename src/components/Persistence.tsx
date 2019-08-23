@@ -47,7 +47,7 @@ export default ((props) => {
 
   return (
     <>
-    <div className="controls d-flex flex-column align-items-center">
+    <div className="controls d-flex flex-column align-items-center py-3 mb-5">
       <div className="d-flex flex-row">
         <button
           onClick={save}
