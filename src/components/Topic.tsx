@@ -67,7 +67,7 @@ export default ((props) => {
     <div className="topic container px-5 py-4 my-4 d-flex flex-column">
     <form onSubmit={(e) => {
       e.preventDefault();
-      if(linkedTopics.length == 1){
+      if(linkedTopics.length === 1){
         props.history.push(`/${linkedTopics[0].id}`);
         setSearchQuery('');
       }

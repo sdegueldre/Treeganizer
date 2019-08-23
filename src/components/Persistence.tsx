@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import API, { ROOT_ID } from '../services/API';
+import API from '../services/API';
 import { RouteComponentProps } from 'react-router-dom';
 
 export default ((props) => {
