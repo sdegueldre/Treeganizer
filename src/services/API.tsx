@@ -56,6 +56,7 @@ class API {
     topics.push(new Topic(name));
     topics[parentId].linkedTopics.push(topics.length-1);
     this.callbacks.change.forEach(cb => cb());
+    return topics.length-1;
   }
 
   static removeTopic(id: number) {

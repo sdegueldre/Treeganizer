@@ -8,6 +8,8 @@ export default ((props) => {
   const topicId = parseInt(props.match.params.topicId) || ROOT_ID;
   const [topic, setTopic] = useState(API.getTopic(topicId));
   const [searchQuery, setSearchQuery] = useState('');
+  const [contentInput, setContentInput] = useState('');
+  const [topicInput, setTopicInput] = useState('');
 
   function reloadTopic() {
     setTopic(API.getTopic(topicId));
@@ -16,10 +18,13 @@ export default ((props) => {
   useEffect(reloadTopic, [topicId]);
   API.onChange(reloadTopic)
 
-  function addContent(){
-    const content = window.prompt();
-    if(content && !content.match(/^\s+$/)){
-      API.addContent(content, topic.id);
+  function addContent(e: React.FormEvent<HTMLFormElement>){
+    if(e !== null) {
+      e.preventDefault();
+      if(contentInput && !contentInput.match(/^\s+$/)){
+        API.addContent(contentInput, topic.id);
+        setContentInput('');
+      }
     }
   }
 
@@ -27,10 +32,14 @@ export default ((props) => {
     API.removeContent(topic.contents.indexOf(content), topic.id);
   }
 
-  function addTopic(){
-    const newTopic = window.prompt();
-    if(newTopic && !newTopic.match(/^\s+$/)){
-      API.addTopic(newTopic, topic.id);
+  function addTopic(e: React.FormEvent<HTMLFormElement>){
+    if(e !== null) {
+      e.preventDefault();
+      if(topicInput && !topicInput.match(/^\s+$/)){
+        const newTopicId = API.addTopic(topicInput, topic.id);
+        setTopicInput('');
+        props.history.push(`/${newTopicId}`);
+      }
     }
   }
 
@@ -72,13 +81,22 @@ export default ((props) => {
         <div className="d-flex flex-column">
           {contents.map((content, contentId) => (
               <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
-                <ContentBlock content={content} className="col-12 col-md-9"/>
+                <ContentBlock content={content} className="col-12 col-md-9 px-0"/>
                 <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
                 <button onClick={() => removeContent(content)} className="btn btn-danger">Delete</button>
               </div>
             )
           )}
-          <button onClick={addContent} className="btn btn-primary mx-auto">Add content</button>
+          <form className="form-inline" onSubmit={addContent}>
+            <input
+              className="form-control flex-grow-1"
+              placeholder="Add some content..."
+              type="text"
+              onChange={(e) => setContentInput(e.target.value)}
+              value={contentInput}
+            ></input>
+            <button type="submit" className="btn btn-primary ml-1">Submit</button>
+          </form>
         </div>
         <hr/>
         <h2 className="text-center">Related topics:</h2>
@@ -90,7 +108,16 @@ export default ((props) => {
             <button onClick={() => removeTopic(t.id)} className="btn btn-danger ml-auto">Delete</button>
           </div>)
         )}
-        <button onClick={addTopic} className="btn btn-primary mx-auto">Add topic</button>
+        <form className="form-inline" onSubmit={addTopic}>
+          <input
+            className="form-control flex-grow-1"
+            placeholder="Add a topic..."
+            type="text"
+            onChange={(e) => setTopicInput(e.target.value)}
+            value={topicInput}
+          ></input>
+          <button type="submit" className="btn btn-primary ml-1">Submit</button>
+        </form>
       </div>
     </div>
     </>
