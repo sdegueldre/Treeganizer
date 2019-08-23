@@ -7,7 +7,7 @@ import ContentBlock from './ContentBlock';
 export default ((props) => {
   const topicId = parseInt(props.match.params.topicId) || ROOT_ID;
   const [topic, setTopic] = useState(API.getTopic(topicId));
-  const [searchContent, setSearchContent] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   function reloadTopic() {
     setTopic(API.getTopic(topicId));
@@ -51,14 +51,14 @@ export default ((props) => {
     <>
     <h2 className="text-center d-block">{topic.name}</h2>
     <div className="topic container px-5 py-4 my-4 d-flex flex-column">
+    <label className="px-0 col-12 col-md-6 ml-auto mb-3 d-flex flex-row align-items-center">
+      Search: <input className="ml-3 flex-grow-1" type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}></input>
+    </label>
       {topic.id !== ROOT_ID && <>
-        <label className="px-0 col-12 col-md-6 ml-auto mb-3 d-flex flex-row align-items-center">
-          Search: <input className="ml-3 flex-grow-1" type="text" value={searchContent} onChange={(e) => setSearchContent(e.target.value)}></input>
-        </label>
+        <hr/>
         <div className="d-flex flex-column">
           {topic.contents
-            .filter(c => c.toLowerCase()
-            .includes(searchContent.toLowerCase()))
+            .filter(c => c.toLowerCase().includes(searchQuery.toLowerCase()))
             .map((content, contentId) => (
                 <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
                   <ContentBlock content={content} className="col-12 col-md-9"/>
@@ -74,12 +74,15 @@ export default ((props) => {
         <h2 className="text-center">Related topics:</h2>
       </>}
       <div className="d-flex flex-column">
-        {topic.linkedTopics.map(id => (
-          <div className="d-flex flex-row align-items-center" key={id}>
-            <button onClick={() => props.history.push(`/${id}`)}>{API.getTopic(id).name}</button>
-            <button onClick={() => removeTopic(id)} className="btn btn-danger ml-auto">Delete</button>
-          </div>
-        ))}
+        {topic.linkedTopics
+          .map(id => ({id, name: API.getTopic(id).name}))
+          .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
+          .map(t => (
+            <div className="d-flex flex-row align-items-center" key={t.id}>
+              <button onClick={() => props.history.push(`/${t.id}`)}>{t.name}</button>
+              <button onClick={() => removeTopic(t.id)} className="btn btn-danger ml-auto">Delete</button>
+            </div>)
+          )}
         <button onClick={addTopic} className="btn btn-primary mx-auto">Add topic</button>
       </div>
     </div>
