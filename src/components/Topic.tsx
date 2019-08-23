@@ -80,8 +80,8 @@ export default ((props) => {
         <hr/>
         <div className="d-flex flex-column">
           {contents.map((content, contentId) => (
-              <div className="d-flex flex-row align-items-center flex-wrap" key={content}>
-                <ContentBlock content={content} className="col-12 col-md-9 px-0"/>
+              <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content}>
+                <ContentBlock content={content} className="col-12 col-md-9 my-0"/>
                 <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
                 <button onClick={() => removeContent(content)} className="btn btn-danger">Delete</button>
               </div>

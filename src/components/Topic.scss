@@ -11,6 +11,10 @@ body {
   box-shadow: 0 2px 8px transparentize(black, 0.9);
 }
 
+.content-item:nth-child(2n+1){
+  background-color: darken($light, 2%);
+}
+
 *[draggable=true] {
    cursor: pointer;
 }
