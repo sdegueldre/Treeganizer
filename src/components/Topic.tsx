@@ -84,12 +84,12 @@ export default ((props) => {
         setSearchQuery('');
       }
     }}>
-      <label className="px-0 col-12 col-md-6 ml-auto mb-3 d-flex flex-row align-items-center">
+      <label className="px-0 col-12 col-md-6 ml-auto d-flex flex-row align-items-center">
         Search: <input className="ml-3 flex-grow-1" type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} autoFocus={true}></input>
       </label>
     </form>
       {topic.id !== ROOT_ID && <>
-        <div className="d-flex flex-column mt-4">
+        <div className="d-flex flex-column mt-5">
           {contents.map((content, contentId) => (
               <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content}>
                 <ContentBlock content={content} className="col-12 col-md-9 my-0"/>
@@ -109,7 +109,7 @@ export default ((props) => {
             <button type="submit" className="btn btn-primary ml-1">Submit</button>
           </form>
         </div>
-        <h2 className="text-center mt-4">Related topics:</h2>
+        <h4 className="text-center mt-5 mb-4">Related topics</h4>
       </>}
       <div className="d-flex flex-column">
         {linkedTopics.map(t => (
