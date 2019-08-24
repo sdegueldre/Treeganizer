@@ -77,8 +77,7 @@ export default ((props) => {
       </label>
     </form>
       {topic.id !== ROOT_ID && <>
-        <hr/>
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column mt-4">
           {contents.map((content, contentId) => (
               <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content}>
                 <ContentBlock content={content} className="col-12 col-md-9 my-0"/>
@@ -98,8 +97,7 @@ export default ((props) => {
             <button type="submit" className="btn btn-primary ml-1">Submit</button>
           </form>
         </div>
-        <hr/>
-        <h2 className="text-center">Related topics:</h2>
+        <h2 className="text-center mt-4">Related topics:</h2>
       </>}
       <div className="d-flex flex-column">
         {linkedTopics.map(t => (
