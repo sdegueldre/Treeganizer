@@ -47,6 +47,20 @@ export default ((props) => {
     API.removeTopic(id);
   }
 
+  const linkedTopics = topic.linkedTopics
+    .map(id => ({id, name: API.getTopic(id).name}))
+    .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  function editTopic(id: number) {
+    const topic = linkedTopics.find(t => t.id === id);
+    if(topic) {
+      const newName = window.prompt("edit topic:", topic.name)
+      if(newName && !newName.match(/^\s+$/) && newName !== topic.name){
+        API.editTopic({...API.getTopic(topic.id), name: newName});
+      }
+    }
+  }
+
   function editContent(id: number){
     const content = topic.contents[id]
     const newContent = window.prompt("edit content:", content)
@@ -57,9 +71,7 @@ export default ((props) => {
   }
 
   const contents = topic.contents.filter(c => c.toLowerCase().includes(searchQuery.toLowerCase()));
-  const linkedTopics = topic.linkedTopics
-    .map(id => ({id, name: API.getTopic(id).name}))
-    .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
 
   return (
     <>
@@ -103,7 +115,8 @@ export default ((props) => {
         {linkedTopics.map(t => (
           <div className="d-flex flex-row align-items-center" key={t.id}>
             <button className="btn btn-light border" onClick={() => props.history.push(`/${t.id}`)}>{t.name}</button>
-            <button onClick={() => removeTopic(t.id)} className="btn btn-danger ml-auto">Delete</button>
+            <button onClick={() => editTopic(t.id)} className="btn btn-secondary ml-auto">Edit</button>
+            <button onClick={() => removeTopic(t.id)} className="btn btn-danger">Delete</button>
           </div>)
         )}
         <form className="form-inline" onSubmit={addTopic}>
