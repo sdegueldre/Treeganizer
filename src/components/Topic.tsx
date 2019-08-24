@@ -93,8 +93,8 @@ export default ((props) => {
           {contents.map((content, contentId) => (
               <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content}>
                 <ContentBlock content={content} className="col-12 col-md-9 my-0"/>
-                <button onClick={() => editContent(contentId)} className="btn btn-secondary ml-auto">Edit</button>
-                <button onClick={() => removeContent(content)} className="btn btn-danger">Delete</button>
+                <button onClick={() => editContent(contentId)} className="btn ml-auto"><i className="far fa-edit"></i></button>
+                <button onClick={() => removeContent(content)} className="btn"><i className="far fa-trash-alt"></i></button>
               </div>
             )
           )}
@@ -115,8 +115,8 @@ export default ((props) => {
         {linkedTopics.map(t => (
           <div className="d-flex flex-row align-items-center" key={t.id}>
             <button className="btn btn-light border" onClick={() => props.history.push(`/${t.id}`)}>{t.name}</button>
-            <button onClick={() => editTopic(t.id)} className="btn btn-secondary ml-auto">Edit</button>
-            <button onClick={() => removeTopic(t.id)} className="btn btn-danger">Delete</button>
+            <button onClick={() => editTopic(t.id)} className="btn ml-auto"><i className="far fa-edit"></i></button>
+            <button onClick={() => removeTopic(t.id)} className="btn"><i className="far fa-trash-alt"></i></button>
           </div>)
         )}
         <form className="form-inline" onSubmit={addTopic}>
