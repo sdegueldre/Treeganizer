@@ -39,7 +39,8 @@ export default ((props) => {
       const saveIndicator = document.querySelector('.save-successful') as HTMLElement;
       if(saveIndicator){
         saveIndicator.classList.remove('flip-in-out');
-        window.setTimeout(() => saveIndicator.classList.add('flip-in-out'), 1);
+        void saveIndicator.offsetWidth;
+        saveIndicator.classList.add('flip-in-out');
       }
       setSaveInProgress(false);
     });
