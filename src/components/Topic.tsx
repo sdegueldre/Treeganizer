@@ -30,7 +30,11 @@ export default ((props) => {
   }
 
   function removeContent(content: {text: string, isArchived: boolean}){
-    API.archiveContent(topic.contents.indexOf(content), topic.id);
+    if(!content.isArchived) {
+      API.archiveContent(topic.contents.indexOf(content), topic.id);
+    } else {
+      API.removeContent(topic.contents.indexOf(content), topic.id);
+    }
   }
 
   function addTopic(e: React.FormEvent<HTMLFormElement>){
@@ -44,8 +48,12 @@ export default ((props) => {
     }
   }
 
-  function removeTopic(id: number){
-    API.archiveTopic(id);
+  function removeTopic(id: number, isAlreadyArchived: boolean){
+    if(!isAlreadyArchived) {
+      API.archiveTopic(id);
+    } else {
+      API.removeTopic(id);
+    }
   }
 
   const linkedTopics = topic.linkedTopics
@@ -71,7 +79,6 @@ export default ((props) => {
     }
   }
 
-  console.log('contents before filter:', topic.contents);
   const contents = topic.contents.filter(c => c.isArchived === seeArchived && c.text.toLowerCase().includes(searchQuery.toLowerCase()));
 
 
@@ -124,7 +131,7 @@ export default ((props) => {
           <div className="d-flex flex-row align-items-center" key={t.id}>
             <button className="btn btn-light border" onClick={() => props.history.push(`/${t.id}`)}>{t.name}</button>
             <button onClick={() => editTopic(t.id)} className="btn ml-auto"><i className="far fa-edit"></i></button>
-            <button onClick={() => removeTopic(t.id)} className="btn"><i className="far fa-trash-alt"></i></button>
+            <button onClick={() => removeTopic(t.id, t.isArchived)} className="btn"><i className="far fa-trash-alt"></i></button>
           </div>)
         )}
         <form className="form-inline" onSubmit={addTopic}>

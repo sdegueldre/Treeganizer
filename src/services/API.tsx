@@ -49,7 +49,6 @@ class API {
       console.log(id);
       throw new Error(`Could not render non-existant topic with id "${id}"`);
     }
-    console.log('topic before copy: ', topics[id]);
     const copy = {...topics[id]};
     return {
       name: copy.name,
@@ -68,6 +67,7 @@ class API {
   }
 
   static removeTopic(id: number) {
+    console.log('Removing topic with id ', id)
     topics = topics.map(t => ({...t, linkedTopics: t.linkedTopics.map(linkedId => {
       if(linkedId < id)
         return linkedId;
