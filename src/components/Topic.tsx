@@ -28,7 +28,7 @@ export default ((props) => {
     }
   }
 
-  function removeContent(content: string){
+  function removeContent(content: {text: string, isArchived: boolean}){
     API.removeContent(topic.contents.indexOf(content), topic.id);
   }
 
@@ -63,14 +63,15 @@ export default ((props) => {
 
   function editContent(id: number){
     const content = topic.contents[id]
-    const newContent = window.prompt("edit content:", content)
-    if(newContent && !newContent.match(/^\s+$/) && newContent !== content){
-      topic.contents[id] = newContent;
+    const newContent = window.prompt("edit content:", content.text)
+    if(newContent && !newContent.match(/^\s+$/) && newContent !== content.text){
+      topic.contents[id].text = newContent;
       API.editTopic(topic);
     }
   }
 
-  const contents = topic.contents.filter(c => c.toLowerCase().includes(searchQuery.toLowerCase()));
+  console.log('contents before filter:', topic.contents);
+  const contents = topic.contents.filter(c => c.text.toLowerCase().includes(searchQuery.toLowerCase()));
 
 
   return (
@@ -91,8 +92,8 @@ export default ((props) => {
       {topic.id !== ROOT_ID && <>
         <div className="d-flex flex-column mt-5">
           {contents.map((content, contentId) => (
-              <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content}>
-                <ContentBlock content={content} className="col-12 col-md-9 my-0"/>
+              <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content.text}>
+                <ContentBlock content={content.text} className="col-12 col-md-9 my-0"/>
                 <button onClick={() => editContent(contentId)} className="btn ml-auto"><i className="far fa-edit"></i></button>
                 <button onClick={() => removeContent(content)} className="btn"><i className="far fa-trash-alt"></i></button>
               </div>

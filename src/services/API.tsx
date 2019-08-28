@@ -5,11 +5,14 @@ const files = new DriveFiles(
 )
 
 export class Topic {
+  public archived: boolean;
   constructor(
     public name: string,
     public linkedTopics: number[] = [],
-    public contents: string[] = []
-  ){ };
+    public contents: {text: string, isArchived: boolean}[] = []
+  ){
+    this.archived = false;
+  };
 };
 
 export type topicId = number;
@@ -20,7 +23,10 @@ let topics: Topic[];
 if(topicData === null){
   topics = [
     new Topic('Topic list', [1, 2, 3]),
-    new Topic('Topic 1', [3, 2], ["this is the content of topic 1", "this is a second content item"]),
+    new Topic('Topic 1', [3, 2], [
+      {text: "this is the content of topic 1", isArchived: false},
+      {text: "this is a second content item", isArchived: false}
+    ]),
     new Topic('Topic 2'),
     new Topic('A random topic'),
   ]
@@ -43,12 +49,14 @@ class API {
       console.log(id);
       throw new Error(`Could not render non-existant topic with id "${id}"`);
     }
+    console.log('topic before copy: ',topics[id]);
     const copy = {...topics[id]};
     return {
       name: copy.name,
       linkedTopics: [...copy.linkedTopics],
       contents: [...copy.contents],
-      id: id
+      archived: copy.archived,
+      id
     };
   }
 
@@ -77,6 +85,10 @@ class API {
     delete(t.id);
     topics[id] = t;
     this.callbacks.change.forEach(cb => cb());
+  }
+
+  static archiveTopic(id: number) {
+    topics[id].archived = true;
   }
 
   static async save() {
@@ -109,7 +121,7 @@ class API {
 
   static addContent(content: string, id: topicId) {
     const topic = topics[id];
-    topic.contents.push(content);
+    topic.contents.push({text: content, isArchived: false});
     this.callbacks.change.forEach(cb => cb());
   }
 
@@ -133,7 +145,7 @@ class API {
           fr.readAsText(files[0]);
           fr.onload = () => {
             try {
-              topics = JSON.parse(fr.result as string).map((v: [string, number[], string[]]) => new Topic(...v));
+              topics = JSON.parse(fr.result as string).map((v: [string, number[], {text: string, isArchived: boolean}[]]) => new Topic(...v));
             } catch(e) {
               console.error('Invalid JSON data, aborting.');
             }
