@@ -5,13 +5,13 @@ const files = new DriveFiles(
 )
 
 export class Topic {
-  public archived: boolean;
+  public isArchived: boolean;
   constructor(
     public name: string,
     public linkedTopics: number[] = [],
     public contents: {text: string, isArchived: boolean}[] = []
   ){
-    this.archived = false;
+    this.isArchived = false;
   };
 };
 
@@ -49,13 +49,13 @@ class API {
       console.log(id);
       throw new Error(`Could not render non-existant topic with id "${id}"`);
     }
-    console.log('topic before copy: ',topics[id]);
+    console.log('topic before copy: ', topics[id]);
     const copy = {...topics[id]};
     return {
       name: copy.name,
       linkedTopics: [...copy.linkedTopics],
       contents: [...copy.contents],
-      archived: copy.archived,
+      isArchived: copy.isArchived,
       id
     };
   }
@@ -88,7 +88,7 @@ class API {
   }
 
   static archiveTopic(id: number) {
-    topics[id].archived = true;
+    topics[id].isArchived = true;
   }
 
   static async save() {
@@ -146,8 +146,9 @@ class API {
           fr.onload = () => {
             try {
               topics = JSON.parse(fr.result as string).map((v: [string, number[], {text: string, isArchived: boolean}[]]) => new Topic(...v));
+              console.log('topics after import:', JSON.stringify(topics));
             } catch(e) {
-              console.error('Invalid JSON data, aborting.');
+              console.error('Invalid JSON data, aborting.', e);
             }
             resolve();
           }

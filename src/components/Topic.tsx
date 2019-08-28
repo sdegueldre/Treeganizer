@@ -48,8 +48,8 @@ export default ((props) => {
   }
 
   const linkedTopics = topic.linkedTopics
-    .map(id => ({id, name: API.getTopic(id).name}))
-    .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    .map(id => ({id, ...API.getTopic(id)}))
+    .filter(t => !t.isArchived && t.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   function editTopic(id: number) {
     const topic = linkedTopics.find(t => t.id === id);
@@ -71,7 +71,8 @@ export default ((props) => {
   }
 
   console.log('contents before filter:', topic.contents);
-  const contents = topic.contents.filter(c => c.text.toLowerCase().includes(searchQuery.toLowerCase()));
+  const contents = topic.contents.filter(c => !c.isArchived && c.text.toLowerCase().includes(searchQuery.toLowerCase()));
+
 
 
   return (
