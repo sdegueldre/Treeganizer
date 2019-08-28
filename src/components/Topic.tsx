@@ -10,6 +10,7 @@ export default ((props) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [contentInput, setContentInput] = useState('');
   const [topicInput, setTopicInput] = useState('');
+  const [seeArchived, setSeeArchived] = useState(false);
 
   function reloadTopic() {
     setTopic(API.getTopic(topicId));
@@ -29,7 +30,7 @@ export default ((props) => {
   }
 
   function removeContent(content: {text: string, isArchived: boolean}){
-    API.removeContent(topic.contents.indexOf(content), topic.id);
+    API.archiveContent(topic.contents.indexOf(content), topic.id);
   }
 
   function addTopic(e: React.FormEvent<HTMLFormElement>){
@@ -44,12 +45,12 @@ export default ((props) => {
   }
 
   function removeTopic(id: number){
-    API.removeTopic(id);
+    API.archiveTopic(id);
   }
 
   const linkedTopics = topic.linkedTopics
     .map(id => ({id, ...API.getTopic(id)}))
-    .filter(t => !t.isArchived && t.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    .filter(t => t.isArchived === seeArchived && t.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   function editTopic(id: number) {
     const topic = linkedTopics.find(t => t.id === id);
@@ -71,7 +72,7 @@ export default ((props) => {
   }
 
   console.log('contents before filter:', topic.contents);
-  const contents = topic.contents.filter(c => !c.isArchived && c.text.toLowerCase().includes(searchQuery.toLowerCase()));
+  const contents = topic.contents.filter(c => c.isArchived === seeArchived && c.text.toLowerCase().includes(searchQuery.toLowerCase()));
 
 
 
@@ -79,17 +80,22 @@ export default ((props) => {
     <>
     <h2 className="text-center d-block">{topic.name}</h2>
     <div className="topic container px-5 py-4 my-4 d-flex flex-column">
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      if(linkedTopics.length === 1){
-        props.history.push(`/${linkedTopics[0].id}`);
-        setSearchQuery('');
-      }
-    }}>
-      <label className="px-0 col-12 col-md-6 ml-auto d-flex flex-row align-items-center">
-        Search: <input className="ml-3 flex-grow-1" type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} autoFocus={true}></input>
+    <div className="d-flex align-items-center">
+      <label className="d-flex align-items-center m-0 mr-auto">
+        See archived: <input className="ml-2" type="checkbox" checked={seeArchived} onChange={() => setSeeArchived(v => !v)}></input>
       </label>
-    </form>
+      <form className="col-12 col-md-6" onSubmit={(e) => {
+        e.preventDefault();
+        if(linkedTopics.length === 1){
+          props.history.push(`/${linkedTopics[0].id}`);
+          setSearchQuery('');
+        }
+      }}>
+        <label className="px-0 d-flex flex-row align-items-center m-0">
+          Search: <input className="ml-3 flex-grow-1" type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} autoFocus={true}></input>
+        </label>
+      </form>
+    </div>
       {topic.id !== ROOT_ID && <>
         <div className="d-flex flex-column mt-5">
           {contents.map((content, contentId) => (

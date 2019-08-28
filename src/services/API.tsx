@@ -88,7 +88,10 @@ class API {
   }
 
   static archiveTopic(id: number) {
+    console.log('topic before archiving subtopic:', topics[id]);
     topics[id].isArchived = true;
+    console.log('topic after archiving subtopic:', topics[id]);
+    this.callbacks.change.forEach(cb => cb());
   }
 
   static async save() {
@@ -128,6 +131,14 @@ class API {
   static removeContent(contentId: number, topicId: topicId) {
     const topic = topics[topicId];
     topic.contents.splice(contentId, 1);
+    this.callbacks.change.forEach(cb => cb());
+  }
+
+  static archiveContent(contentId: number, topicId: topicId) {
+    const topic = topics[topicId];
+    console.log('topic before archiving content:', topic);
+    topic.contents[contentId].isArchived = true;
+    console.log('topic after archiving content:', topic);
     this.callbacks.change.forEach(cb => cb());
   }
 
