@@ -108,9 +108,9 @@ export default ((props) => {
       {topic.id !== ROOT_ID && <>
         <div className="d-flex flex-column mt-5">
           {contents.map((content) => (
-              <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content.text}>
-                <ContentBlock content={content.text} className="col-12 col-md-9 my-0"/>
-                <button onClick={() => editContent(content)} className="btn ml-auto"><i className="far fa-edit"></i></button>
+              <div className="d-flex flex-row align-items-center content-item" key={content.text}>
+                <ContentBlock content={content.text} className="flex-grow-1 my-2 mx-3"/>
+                <button onClick={() => editContent(content)} className="btn"><i className="far fa-edit"></i></button>
                 <button onClick={() => removeContent(content)} className="btn"><i className="far fa-trash-alt"></i></button>
               </div>
             )
