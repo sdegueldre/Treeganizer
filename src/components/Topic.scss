@@ -5,6 +5,10 @@ body {
   background-color: $light;
 }
 
+input {
+  inline-size: 0;
+}
+
 .topic {
   background-color: white;
   border-radius: 8px;

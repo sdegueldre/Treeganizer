@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 export default ((props) => {
   return (
     <>
-    // Navbar placeholder so that the fixed navbar doesn't let the content go behind it
+    {/* Navbar placeholder so that the fixed navbar doesn't let the content go behind it */}
     <nav className="navbar navbar-expand-md">
       <button className="navbar-brand btn btn-link mr-0">←</button>
     </nav>

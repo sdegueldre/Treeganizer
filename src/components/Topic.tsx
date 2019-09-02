@@ -87,13 +87,13 @@ export default ((props) => {
 
   return (
     <>
-    <h2 className="text-center d-block">{topic.name}</h2>
+    <h2 className="text-center d-block mt-4">{topic.name}</h2>
     <div className="topic container px-5 py-4 my-4 d-flex flex-column">
-    <div className="d-flex align-items-center">
-      <label className="d-flex align-items-center m-0 mr-auto">
+    <div className="d-flex align-items-center flex-wrap">
+      <label className="d-flex align-items-center m-0 mr-auto col-12 col-md-6 my-2">
         See archived: <input className="ml-2" type="checkbox" checked={seeArchived} onChange={() => setSeeArchived(v => !v)}></input>
       </label>
-      <form className="col-12 col-md-6" onSubmit={(e) => {
+      <form className="col-12 col-md-6 my-2" onSubmit={(e) => {
         e.preventDefault();
         if(linkedTopics.length === 1){
           props.history.push(`/${linkedTopics[0].id}`);
