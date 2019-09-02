@@ -70,8 +70,10 @@ export default ((props) => {
     }
   }
 
-  function editContent(id: number){
-    const content = topic.contents[id]
+  function editContent(content: {text: string, isArchived: boolean}){
+    const id = topic.contents.findIndex(c => c.text === content.text);
+    if(id === -1)
+      throw new Error(`No such content on current topic: "${content}"`);
     const newContent = window.prompt("edit content:", content.text)
     if(newContent && !newContent.match(/^\s+$/) && newContent !== content.text){
       topic.contents[id].text = newContent;
@@ -105,10 +107,10 @@ export default ((props) => {
     </div>
       {topic.id !== ROOT_ID && <>
         <div className="d-flex flex-column mt-5">
-          {contents.map((content, contentId) => (
+          {contents.map((content) => (
               <div className="d-flex flex-row align-items-center flex-wrap content-item" key={content.text}>
                 <ContentBlock content={content.text} className="col-12 col-md-9 my-0"/>
-                <button onClick={() => editContent(contentId)} className="btn ml-auto"><i className="far fa-edit"></i></button>
+                <button onClick={() => editContent(content)} className="btn ml-auto"><i className="far fa-edit"></i></button>
                 <button onClick={() => removeContent(content)} className="btn"><i className="far fa-trash-alt"></i></button>
               </div>
             )
