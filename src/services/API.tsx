@@ -102,8 +102,9 @@ class API {
       const resp = await files.list({spaces: 'appDataFolder'});
       const topicFiles = resp.result.files.filter((f: File) => f.name === 'topics.json');
       let file;
-      if(topics.length === 0) {
-        // create topics file and assign it to file
+      if(topicFiles.length === 0) {
+        file = (await files.create({parents: ['appDataFolder'], name: 'topics.json'})).result;
+        console.log('Created file:', file)
       } else {
         file = topicFiles[0];
       }
@@ -175,8 +176,8 @@ class API {
     const resp = await files.list({spaces: 'appDataFolder'});
     const topicFiles = resp.result.files.filter((f: File) => f.name === 'topics.json');
     let file;
-    if(topics.length === 0) {
-      // create topics file and assign it to file
+    if(topicFiles.length === 0) {
+      console.log('Couldn\'t find any data to load from drive')
     } else {
       file = topicFiles[0];
       const response = await files.get({fileId: file.id, alt: 'media'});
